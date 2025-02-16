@@ -2,6 +2,11 @@
 
 ansible all -i inventory -m ping
 
+ansible all -i inventory -a "ls -al ~"
+
+ansible all -i inventory -a "cat /var/log/messages"
+
+
 # Run the playbook using the local inventory file:
 
 ansible-playbook -i inventory playbook.yml

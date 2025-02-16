@@ -7,10 +7,12 @@
         - wget
         - telnet
         - unzip
+     service_name:
+        - nginx
    become: yes
    gather_facts: yes
    tasks:
-     - name: installing nginx
+     - name: installing packages
        apt:
          name: "{{ item }}"
          state: latest
