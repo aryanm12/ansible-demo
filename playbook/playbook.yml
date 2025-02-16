@@ -1,0 +1,72 @@
+---
+ - name: install nginx on ubuntu
+   hosts: Ubuntu_Servers
+   vars:
+     package_names:
+        - nginx
+        - wget
+        - telnet
+        - unzip
+   become: yes
+   gather_facts: yes
+   tasks:
+     - name: installing nginx
+       apt:
+         name: "{{ item }}"
+         state: latest
+       loop:
+         - "{{ package_names }}"
+       tags:
+         - nginx
+
+     - name: start nginx service
+       service:
+         name: "{{ service_name }}"
+         state: started
+       tags:
+         - nginx
+
+     - name: copy file to target servers
+       template:
+         src: "{{ item.src }}"
+         dest: "{{ item.dest }}"
+       notify: restart the service
+       loop:
+         - { src: index.html.j2, dest: /var/www/html/index.nginx-debian.html }
+       tags:
+         - nginx
+
+   handlers:
+    - name: restart the service
+      service:
+        name: nginx
+        state: restarted
+
+
+
+ - name: install nginx on RedHat
+   hosts: RedHat_Servers
+   vars:
+     package_names: "nginx"
+   gather_facts: yes
+   become: yes
+   tags:
+     - redhat
+   tasks:
+     - name: installing nginx on RedHat
+       yum:
+         name: "{{ package_names }}"
+         state: latest
+
+     - name: start nginx service
+       service:
+         name: "{{ package_names }}"
+         state: started
+       tags:
+         - nginx_redhat
+
+     - name: print os family of target server
+       debug:
+         msg: "{{ ansible_os_family }}"
+       tags:
+         - redhat

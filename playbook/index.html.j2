@@ -1,0 +1,5 @@
+{% if ansible_os_family == "Debian" %}
+    <p>This is an Ubuntu/Debian system and managed by Ansible</p>
+{% elif ansible_os_family == "RedHat" %}
+    <p>This is a RedHat/CentOS system and managed by Ansible</p>
+{% endif %}
