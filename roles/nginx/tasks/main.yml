@@ -6,7 +6,7 @@
     name: "{{ item }}"
     state: latest
   loop:
-    - "{{ package_name }}"
+    - "{{ package_name }}-{{ package_version }}"
   tags:
     - nginx
 
