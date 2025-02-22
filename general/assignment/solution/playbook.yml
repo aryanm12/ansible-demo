@@ -1,0 +1,59 @@
+---
+- name: Install Apache and configure web servers
+  hosts: all
+  become: yes
+  vars:
+    deploy_password: "{{ 'password123' | password_hash('sha512') }}"  # Replace with your secure password created under vault file
+  tasks:
+    - name: Install Apache on Ubuntu
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Apache on RedHat
+      yum:
+        name: httpd
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Apache is started and enabled on Ubuntu
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Apache is started and enabled on RedHat
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: Create custom HTML page using template
+      template:
+        src: index.html
+        dest: "/var/www/html/index.html"
+        mode: '0644'
+
+    - name: Create deploy user
+      user:
+        name: deploy
+        password: "{{ deploy_password }}"
+        groups: sudo
+        append: yes
+
+    - name: Restart Apache if configuration changes
+      service:
+        name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+        state: restarted
+      notify: restart_apache
+
+  handlers:
+    - name: restart_apache
+      service:
+        name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+        state: restarted
+

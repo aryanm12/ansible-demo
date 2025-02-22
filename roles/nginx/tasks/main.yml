@@ -1,0 +1,40 @@
+#SPDX-License-Identifier: MIT-0
+---
+---
+- name: installing nginx
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "{{ package_name }}"
+  tags:
+    - nginx
+
+- name: start nginx service
+  service:
+    name: nginx
+    state: started
+  tags:
+    - nginx
+
+- name: copy template file to target servers
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  notify: restart the service
+  loop:
+   - { src: index.html, dest: /var/www/html/index.nginx-debian.html }
+  tags:
+   - nginx
+
+- name: copy static files to target servers
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  notify: restart the service
+  loop:
+   - { src: test1.txt, dest: /tmp/test1.txt }
+   - { src: test2.txt, dest: /var/test2.txt }
+   - { src: test3.txt, dest: /opt/test3.txt }
+  tags:
+   - nginx

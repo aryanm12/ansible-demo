@@ -72,3 +72,19 @@
          msg: "{{ ansible_os_family }}"
        tags:
          - redhat
+
+ - name: create linux user with password
+   hosts: all
+   become: true
+   vars_files:
+    - secrets.yml
+   tasks:
+    - name: Create user account
+      user:
+        name: "{{ username }}"
+        password: "{{ user_password }}"
+        shell: /bin/bash
+        home: "/home/{{ username }}"
+        create_home: yes
+        state: present
+        expires: -1

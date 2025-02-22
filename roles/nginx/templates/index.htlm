@@ -1,0 +1,1 @@
+Hi, These servers are managed by Ansible and os family with {{ ansible_os_family }}

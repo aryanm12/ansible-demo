@@ -1,0 +1,6 @@
+---
+ - name: playbook to test role
+   become: yes
+   hosts: Ubuntu_Servers
+   roles:
+     - nginx

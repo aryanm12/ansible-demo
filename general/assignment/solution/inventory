@@ -1,0 +1,7 @@
+[Ubuntu_Servers]
+ubuntu1 ansible_host=172.31.33.72 ansible_user=ubuntu
+ubuntu2 ansible_host=172.31.35.149 ansible_user=ubuntu
+
+[RedHat_Servers]
+RedHat1 ansible_host=172.31.40.105 ansible_user=ec2-user
+RedHat2 ansible_host=172.31.34.169 ansible_user=ec2-user
