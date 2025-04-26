@@ -2,5 +2,6 @@
  - name: playbook to test role
    become: yes
    hosts: Ubuntu_Servers
+   gather_facts: yes
    roles:
      - nginx
